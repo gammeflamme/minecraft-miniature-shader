@@ -4,6 +4,10 @@
 
 uniform float viewHeight;
 uniform float viewWidth;
+<<<<<<< HEAD
+=======
+uniform mat4 gbufferProjection;
+>>>>>>> pr/82
 uniform vec3 fogColor;
 uniform vec3 skyColor;
 

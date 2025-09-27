@@ -34,6 +34,7 @@ varying vec4 normal;
 void main() {
    gl_Position = ftransform();
 
+<<<<<<< HEAD
    float sunHeight = view2feet(sunPosition).y;
 
    color        = gl_Color;
@@ -42,12 +43,19 @@ void main() {
    normal       = vec4(gl_Normal, 1.0);
    ambient      = getAmbientColor(sunHeight);
    reflectivity = GLASS_REFLECTIVITY;
+=======
+   #ifdef DISTANT_HORIZONS_WATER
+      isWater = float(dhMaterialId == DH_BLOCK_WATER);
+   #else
+      isWater = float(mc_Entity.x == 10008.0);
+   #endif
+>>>>>>> pr/82
 
    torchStrength = getTorchStrength(lightUV.s);
-   feetPos = view2feet(getViewPosition());
-   fogMix = getFogMix(feetPos);
-   gradientFogColor = getFogColor(fogMix, feetPos);
+   worldPos = getWorldPosition();
+   fogMix = getFogMix(worldPos);
 
+#ifndef DISTANT_HORIZONS_WATER
    if (mc_Entity.x == 10008.0) {
       float posRandom = random(floor(feetPos.xz) + floor(cameraPosition.xz));
 
@@ -62,4 +70,8 @@ void main() {
       reflectivity = WATER_REFLECTIVITY;
       waterTexStrength = getWaterTextureStrength(posRandom);
    }
+#endif
+
+   // scale normal to 0..1
+   normal = vec4(0.5 + 0.5*normal.xyz, 1.0);
 }

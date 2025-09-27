@@ -6,6 +6,10 @@ uniform sampler2D colortex0;
 uniform sampler2D colortex6;
 uniform sampler2D depthtex0;
 
+#ifdef DISTANT_HORIZONS
+uniform sampler2D dhDepthTex0;
+#endif
+
 varying vec2 texUV;
 
 #include "/common/math.glsl"
@@ -33,8 +37,12 @@ void main() {
 
       #endif
 
+#ifdef DISTANT_HORIZONS
+		float depth          = texture2D(dhDepthTex0, texUV).x;
+#else
       bool isSmoothReflection = reflectivity > 0.5;
       float depth  = texture2D(depthtex0, texUV).x;
+#endif
       vec3 normal  = feet2viewBobless(prenormal);
       vec3 viewPos = isSmoothReflection
                    ? screen2view(texUV, depth)
